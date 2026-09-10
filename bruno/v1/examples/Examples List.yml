@@ -1,0 +1,83 @@
+info:
+  name: Examples List
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: '{{base-url}}/v1/examples?page=1&pageSize=10'
+  params:
+    query:
+      - name: page
+        value: '1'
+        enabled: true
+      - name: pageSize
+        value: '10'
+        enabled: true
+      - name: q
+        value: ''
+        enabled: false
+      - name: status
+        value: active
+        enabled: false
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('responds 200', function () {
+          expect(res.status).to.equal(200);
+        });
+        test('returns a paginated envelope', function () {
+          expect(res.body.data).to.be.an('array');
+          expect(res.body.meta).to.have.property('totalPages');
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  # Examples List
+
+  Paginated list of examples, newest first. Soft-deleted rows are excluded.
+
+  ## Query params
+
+  | Param    | Type    | Required | Default | Constraints          | Description                                       |
+  | -------- | ------- | -------- | ------- | -------------------- | ------------------------------------------------- |
+  | page     | integer | no       | 1       | min 1                | Page number, 1-based.                             |
+  | pageSize | integer | no       | 10      | min 1, max 100       | Rows per page.                                    |
+  | q        | string  | no       | —       | min 1 char           | Case-insensitive match over `name` and `id`.      |
+  | status   | enum    | no       | —       | `active`, `archived` | Exact status match.                               |
+
+  `q` and `status` come from the feature's filter registry
+  (`src/repositories/example.filters.ts`). Adding a filter there adds it here.
+
+  ## Success — 200
+
+  ```json
+  {
+    "data": [
+      {
+        "id": "<uuid>",
+        "name": "<string>",
+        "status": "active | archived",
+        "notes": "<string | null>",
+        "createdAt": "<ISO 8601>",
+        "updatedAt": "<ISO 8601>",
+        "deletedAt": null
+      }
+    ],
+    "meta": { "page": 1, "pageSize": 10, "total": 42, "totalPages": 5 }
+  }
+  ```
+
+  ## Errors
+
+  | Status | When                                                     |
+  | ------ | -------------------------------------------------------- |
+  | 400    | Invalid query params — bad `page`, `pageSize` or `status`. |

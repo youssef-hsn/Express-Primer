@@ -1,0 +1,45 @@
+info:
+  name: Health
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: '{{base-url}}/v1/health'
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('responds 200', function () {
+          expect(res.status).to.equal(200);
+        });
+        test('reports ok', function () {
+          expect(res.body.status).to.equal('ok');
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  # Health
+
+  Liveness check for the API process. Returns **200** with a small JSON body
+  while the server is up. It does **not** check the database — a healthy
+  response here says the process is accepting requests, nothing more.
+
+  **Unauthenticated.** No bearer token is required and no 401 is possible.
+
+  ## Success — 200
+
+  ```json
+  {
+    "status": "ok",
+    "uptime": 1234.56,
+    "timestamp": "2026-01-01T00:00:00.000Z"
+  }
+  ```

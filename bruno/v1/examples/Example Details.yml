@@ -1,0 +1,62 @@
+info:
+  name: Example Details
+  type: http
+  seq: 3
+
+http:
+  method: GET
+  url: '{{base-url}}/v1/examples/{{example-id}}'
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('responds 200', function () {
+          expect(res.status).to.equal(200);
+        });
+        test('returns example record', function () {
+          expect(res.body.data).to.be.an('object');
+          expect(typeof res.body.data.id).to.equal('string');
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  # Example Details
+
+  Fetches a single example by its UUID. Soft-deleted rows return 404.
+
+  ## Path params
+
+  | Param | Type   | Required | Description                     |
+  | ----- | ------ | -------- | ------------------------------- |
+  | id    | string | yes      | Valid UUID of the target example|
+
+  ## Success — 200
+
+  ```json
+  {
+    "data": {
+      "id": "<uuid>",
+      "name": "<string>",
+      "status": "active | archived",
+      "notes": "<string | null>",
+      "createdAt": "<ISO 8601>",
+      "updatedAt": "<ISO 8601>",
+      "deletedAt": null
+    }
+  }
+  ```
+
+  ## Errors
+
+  | Status | When                                                     |
+  | ------ | -------------------------------------------------------- |
+  | 400    | Path parameter `id` is not a valid UUID.                 |
+  | 401    | Missing or undecodable bearer token.                     |
+  | 404    | Example not found or already soft-deleted.               |

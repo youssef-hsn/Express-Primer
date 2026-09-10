@@ -1,0 +1,12 @@
+name: Local
+variables:
+  - name: base-url
+    value: http://localhost:3000
+    enabled: true
+  - name: auth-token
+    value: eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiJsb2NhbC1kZXYtdXNlciIsInByZWZlcnJlZF91c2VybmFtZSI6ImRldiIsIm5hbWUiOiJEZXYgVXNlciIsImVtYWlsIjoiZGV2QGxvY2FsLnRlc3QifQ.
+    enabled: true
+  - name: example-id
+    value: ''
+    enabled: true
+

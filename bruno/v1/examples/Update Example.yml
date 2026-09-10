@@ -1,0 +1,73 @@
+info:
+  name: Update Example
+  type: http
+  seq: 4
+
+http:
+  method: PATCH
+  url: '{{base-url}}/v1/examples/{{example-id}}'
+  body:
+    type: json
+    data: |-
+      {
+        "status": "archived"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('responds 200', function () {
+          expect(res.status).to.equal(200);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  # Update Example
+
+  Updates fields on an existing example. At least one field is required.
+
+  ## Path params
+
+  | Param | Type   | Required | Description                      |
+  | ----- | ------ | -------- | -------------------------------- |
+  | id    | string | yes      | Valid UUID of the target example |
+
+  ## Body — `application/json`
+
+  | Field  | Type           | Required | Constraints                         | Description   |
+  | ------ | -------------- | -------- | ----------------------------------- | ------------- |
+  | name   | string         | no       | 1–255 chars, unique among live rows | Display name. |
+  | status | enum           | no       | `active`, `archived`                | Status value. |
+  | notes  | string \| null | no       | ≤ 2000 chars                        | Free text.    |
+
+  ## Success — 200
+
+  ```json
+  {
+    "data": {
+      "id": "<uuid>",
+      "name": "<string>",
+      "status": "archived",
+      "notes": "<string | null>",
+      "createdAt": "<ISO 8601>",
+      "updatedAt": "<ISO 8601>",
+      "deletedAt": null
+    }
+  }
+  ```
+
+  ## Errors
+
+  | Status | When                                                                             |
+  | ------ | -------------------------------------------------------------------------------- |
+  | 400    | Empty body (no fields provided), invalid body fields, or invalid UUID in path.    |
+  | 401    | Missing or undecodable bearer token.                                             |
+  | 404    | Example not found or already soft-deleted.                                       |
+  | 409    | New `name` conflicts with another active live example.                           |

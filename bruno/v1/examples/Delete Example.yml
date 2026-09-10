@@ -1,0 +1,47 @@
+info:
+  name: Delete Example
+  type: http
+  seq: 5
+
+http:
+  method: DELETE
+  url: '{{base-url}}/v1/examples/{{example-id}}'
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('responds 204', function () {
+          expect(res.status).to.equal(204);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  # Delete Example
+
+  Soft-deletes an example by stamping `deleted_at`. The row disappears from every read,
+  and creating a new example with the same `name` afterwards succeeds.
+
+  ## Path params
+
+  | Param | Type   | Required | Description                      |
+  | ----- | ------ | -------- | -------------------------------- |
+  | id    | string | yes      | Valid UUID of the target example |
+
+  ## Success — 204
+
+  No response body.
+
+  ## Errors
+
+  | Status | When                                                     |
+  | ------ | -------------------------------------------------------- |
+  | 400    | Path parameter `id` is not a valid UUID.                 |
+  | 401    | Missing or undecodable bearer token.                     |
+  | 404    | Example not found or already deleted.                    |
