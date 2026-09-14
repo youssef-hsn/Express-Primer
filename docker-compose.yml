@@ -1,0 +1,35 @@
+name: express-primer
+
+include:
+  - docker/db.compose.yml
+
+x-database-url: &database-url postgres://primer:primer@postgres:5432/express_primer
+
+services:
+  migrate:
+    build:
+      context: .
+      dockerfile: docker/migrate.dockerfile
+    environment:
+      DATABASE_URL: *database-url
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: 'no'
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      NODE_ENV: prod
+      PORT: 3000
+      DATABASE_URL: *database-url
+    ports:
+      - '3000:3000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
