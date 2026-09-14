@@ -123,6 +123,8 @@ Confirm with `pnpm typecheck && pnpm test`.
 | `tests/integration/` | Endpoint tests driving the app through supertest. |
 | `drizzle/` | Generated migration SQL and journal. Generated, never hand-edited; always committed. |
 | `bruno/` | Bruno API collection — one request per endpoint, plus the `Local` environment. |
+| `scripts/` | Reserved for pipeline and utility scripts (CI helpers, maintenance tasks). Nothing lives here yet. |
+| `dist/` | Build output from `pnpm build`. Git-ignored. |
 
 ## Docker
 
@@ -137,5 +139,3 @@ In CI, build from the repo root and run the migration image before deploying the
 
     docker build -f docker/migrate.dockerfile -t <registry>/express-primer-migrate .
     docker run --rm -e DATABASE_URL=$DATABASE_URL <registry>/express-primer-migrate
-| `scripts/` | Reserved for pipeline and utility scripts (CI helpers, maintenance tasks). Nothing lives here yet. |
-| `dist/` | Build output from `pnpm build`. Git-ignored. |
