@@ -27,7 +27,10 @@ scripts/
 logs/
 coverage/
 
-# Docker files themselves
+# Docker & tooling config not needed in images
 Dockerfile
+*.dockerfile
+docker/
 .dockerignore
 docker-compose*.yml
+drizzle.config.ts
