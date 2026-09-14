@@ -135,6 +135,8 @@ Confirm with `pnpm typecheck && pnpm test`.
 | `docker/migrate.dockerfile` | One-shot migration image running `dist/migrate.js`. Needs only `DATABASE_URL`; exits non-zero on failure. |
 | `docker-compose.yml` | Full stack: postgres → migrate → api. `docker compose up --build`. |
 
+The root Compose file is for local development and CI only; production deploys the API and migration images separately against a managed database.
+
 In CI, build from the repo root and run the migration image before deploying the API:
 
     docker build -f docker/migrate.dockerfile -t <registry>/express-primer-migrate .

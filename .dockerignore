@@ -1,15 +1,17 @@
 # Dependencies & build output (rebuilt inside the image)
-node_modules
-dist/
+**/node_modules
+**/dist/
 *.tsbuildinfo
 
 # Secrets & local env
 .env
 .env.*
 
-# Git
+# Git & worktrees
 .git/
 .gitignore
+.worktrees/
+.superpowers/
 
 # Docs, API collection, editor/OS noise — not needed at runtime
 bruno/
