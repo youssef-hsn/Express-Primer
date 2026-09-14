@@ -21,3 +21,6 @@ coverage/
 .DS_Store
 .idea/
 .vscode/
+
+# Local git worktrees
+.worktrees/
