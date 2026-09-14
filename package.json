@@ -27,8 +27,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "examples:remove": "bash scripts/removeExamples.sh",
-    "agents:sync": "bash scripts/syncAgents.sh"
+    "examples:remove": "bash scripts/removeExamples.sh"
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.13.11",
